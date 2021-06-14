@@ -1,5 +1,6 @@
 import os
 from pgorm.db.models import Model
+from pgorm.db.conditions import Query
 
 
 class Employees(Model):
@@ -15,14 +16,19 @@ if __name__ == '__main__':
 
     employees = Employees.objects.select(
         field_names=['id', 'first_name', 'last_name', 'salary', 'grade'],
-        conditions={
-            'first_name': {
+        conditions=Query(
+            first_name={
                 'operator': '=', 'value': 'Renaud'
-            },
-            'id': {
+            }, id={
                 'operator': '=', 'value': 1
             }
-        },
+        ) | Query(
+            first_name={
+                'operator': '=', 'value': 'Renaud'
+            }, id={
+                'operator': '=', 'value': 1
+            }
+        ),
         limit=1,
         offset=0
     )

@@ -1,8 +1,9 @@
 """
 Base manager class to do SQL operations over DB rows
 """
-from typing import List, Dict
+from typing import List
 
+from .conditions import Query
 from .connection import Database
 from .query_parser import select
 
@@ -15,7 +16,7 @@ class BaseManager:
         self.model_class = model_class
         self.connection = None
 
-    def select(self, field_names: List[str] = None, conditions: Dict = None, offset: int = None, limit: int = None):
+    def select(self, field_names: List[str] = None, conditions: Query = None, offset: int = None, limit: int = None):
         """
         Run a select query based on params
         :param field_names: Name of the fields to be selected
@@ -32,13 +33,12 @@ class BaseManager:
         table_name = self.model_class.table_name
         query = select.get_parsed_select_query(
             table_name=table_name, field_names=list(field_names),
-            params=conditions, offset=offset, limit=limit
+            where_clause=conditions, offset=offset, limit=limit
         )
 
         # Execute query and return results
-        print('Execting: ', query)
         db_cursor.execute(query)
-        return db_cursor.fetchall()
+        return [dict(record) for record in db_cursor.fetchall()]
 
     def bulk_insert(self, rows: list):
         pass
