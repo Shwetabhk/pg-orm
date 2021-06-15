@@ -28,7 +28,7 @@ class Query:
             where_clause = "{0} {1} {2} '{3}'".format(
                 where_clause, condition, self.conditions[condition]['operator'], self.conditions[condition]['value'])
             if condition_counter != len(self.conditions.keys()):
-                where_clause = '{0} and'.format(where_clause)
+                where_clause = '{0} AND'.format(where_clause)
             condition_counter = condition_counter + 1
         return where_clause
 
@@ -45,7 +45,7 @@ class Query:
         :param other: other instance of class Query
         :return: merged string
         """
-        return '{0} or {1}'.format(self.__get_sql_format(), other.__get_sql_format())
+        return '{0} OR {1}'.format(self.__get_sql_format(), other.__get_sql_format())
 
     def __and__(self, other):
         """
@@ -53,4 +53,4 @@ class Query:
         :param other: other instance of class Query
         :return: merged string
         """
-        return '{0} and {1}'.format(self.__get_sql_format(), other.__get_sql_format())
+        return '{0} AND {1}'.format(self.__get_sql_format(), other.__get_sql_format())

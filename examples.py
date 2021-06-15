@@ -14,6 +14,7 @@ if __name__ == '__main__':
     os.environ.setdefault('DATABASE_USER', 'postgres')
     os.environ.setdefault('DATABASE_PASSWORD', 'postgres')
 
+    # Select Query
     employees = Employees.objects.select(
         field_names=['id', 'first_name', 'last_name', 'salary', 'grade'],
         conditions=Query(
@@ -33,5 +34,15 @@ if __name__ == '__main__':
         offset=0
     )
 
-    employees = [dict(employee) for employee in employees]
     print(employees)
+
+    # Insert Query
+    employeee_to_be_created = {
+        'first_name': 'Shwetabh',
+        'last_name': 'Kumar',
+        'salary': '10000',
+        'grade': 'L3'
+    }
+
+    employee_created = Employees.objects.insert(**employeee_to_be_created)
+    print(employee_created)

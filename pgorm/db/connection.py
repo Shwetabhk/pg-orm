@@ -33,9 +33,5 @@ class Database:
         connection.close()
 
     @property
-    def cursor(self):
-        """
-        Connection property
-        :return: db connection instance
-        """
-        return psycopg2.connect(**self.__db_settings).cursor(cursor_factory=RealDictCursor)
+    def connection(self):
+        return psycopg2.connect(**self.__db_settings)

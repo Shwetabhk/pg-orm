@@ -1,6 +1,9 @@
+"""
+SELECT Query parser
+"""
 from typing import List, Dict
 
-SELECT_QUERY = "select {field_names} from {table_name} {where_clause} {limit_offset};"
+SELECT_QUERY = "SELECT {field_names} FROM {table_name} {where_clause} {limit_offset};"
 
 
 def get_parsed_select_query(
@@ -26,14 +29,14 @@ def get_parsed_select_query(
         field_names_token = field_names_token[2:]
 
     if where_clause:
-        where_clause = 'where {0}'.format(where_clause)
+        where_clause = 'WHERE {0}'.format(where_clause)
 
     # Define limit and offset in the query
     limit_offset_token = ''
 
     if limit:
         offset = offset if offset else 0
-        limit_offset_token = 'limit {0} offset {1}'.format(limit, offset)
+        limit_offset_token = 'LIMIT {0} OFFSET {1}'.format(limit, offset)
 
     return SELECT_QUERY.format(
         field_names=field_names_token, table_name=table_name,

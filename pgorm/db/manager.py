@@ -1,11 +1,11 @@
 """
 Base manager class to do SQL operations over DB rows
 """
-from typing import List
+from typing import List, Dict
 
 from .conditions import Query
-from .connection import Database
-from .query_parser import select
+from .connection import Database, RealDictCursor
+from .query_parser import select, insert
 
 
 class BaseManager:
@@ -23,11 +23,12 @@ class BaseManager:
         :param conditions: Where clause conditions
         :param offset: Offset of records to fetch
         :param limit: Limit of records to fetch
-        :return:
+        :return: Fetched Records
         """
-        # Instantiate Databse
+        # Instantiate Database Connection and Cursor
         instance: Database = Database()
-        db_cursor = instance.cursor
+        connection = instance.connection
+        db_cursor = connection.cursor(cursor_factory=RealDictCursor)
 
         # Construct Query
         table_name = self.model_class.table_name
@@ -38,12 +39,30 @@ class BaseManager:
 
         # Execute query and return results
         db_cursor.execute(query)
+        connection.commit()
         return [dict(record) for record in db_cursor.fetchall()]
 
-    def bulk_insert(self, rows: list):
-        pass
+    def insert(self, **record: Dict):
+        """
+        Insert Single Record
+        :param record: record params or Dictionary
+        :return: Created Record
+        """
+        # Instantiate Database Connection and Cursor
+        instance: Database = Database()
+        connection = instance.connection
+        db_cursor = connection.cursor(cursor_factory=RealDictCursor)
 
-    def update(self, new_data: dict):
+        # Construct Query
+        table_name = self.model_class.table_name
+        query = insert.get_parsed_single_insert_query(table_name, record)
+
+        # Execute query and return results
+        db_cursor.execute(query)
+        connection.commit()
+        return dict(db_cursor.fetchone())
+
+    def update(self, new_data: Dict):
         pass
 
     def delete(self):
