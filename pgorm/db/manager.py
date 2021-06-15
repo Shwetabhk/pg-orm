@@ -118,5 +118,5 @@ class MetaModel(type):
         return self.manager(model_class=self)
 
     @property
-    def objects(self):
+    def records(self):
         return self.__get_manager()

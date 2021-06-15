@@ -15,7 +15,7 @@ if __name__ == '__main__':
     os.environ.setdefault('DATABASE_PASSWORD', 'postgres')
 
     # Select Query
-    employees = Employees.objects.select(
+    employees = Employees.records.select(
         field_names=['id', 'first_name', 'last_name', 'salary', 'grade'],
         conditions=Query(
             first_name={
@@ -44,16 +44,16 @@ if __name__ == '__main__':
         'grade': 'L3'
     }
 
-    employee_created_1 = Employees.objects.insert(**employeee_to_be_created)
+    employee_created_1 = Employees.records.insert(**employeee_to_be_created)
     print(employee_created_1)
 
-    employee_created_2 = Employees.objects.insert(**employeee_to_be_created)
+    employee_created_2 = Employees.records.insert(**employeee_to_be_created)
     print(employee_created_2)
 
     # Delete By Condition
-    Employees.objects.delete(Query(id={
+    Employees.records.delete(Query(id={
         'operator': '=', 'value': employee_created_1['id']
     }))
 
     # Delete By Id
-    Employees.objects.delete_by_id(id=employee_created_2['id'])
+    Employees.records.delete_by_id(id=employee_created_2['id'])
