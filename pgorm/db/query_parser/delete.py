@@ -1,12 +1,12 @@
 """
 DELETE Query parser
 """
-from typing import Dict
+from pgorm.db.conditions import Query
 
 DELETE_QUERY = "DELETE FROM {table_name} {where_clause};"
 
 
-def get_parsed_delete_query(table_name: str, where_clause: Dict = None):
+def get_parsed_delete_query(table_name: str, where_clause: Query = None):
     """
     Parse delete query according to the received record
     :param table_name: Name of the table

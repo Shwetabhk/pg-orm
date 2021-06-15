@@ -3,8 +3,10 @@ Base manager class to do SQL operations over DB rows
 """
 from typing import List, Dict
 
+from psycopg2.extras import RealDictCursor
+
 from .conditions import Query
-from .connection import Database, RealDictCursor
+from .connection import Database
 from .query_parser import select, insert, delete
 
 
@@ -69,7 +71,7 @@ class BaseManager:
     def update(self, new_data: Dict):
         pass
 
-    def delete(self, conditions: Query = None):
+    def delete(self, conditions: Query):
         """
         Delete records by condition
         :param conditions:

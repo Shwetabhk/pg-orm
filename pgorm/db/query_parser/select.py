@@ -1,14 +1,16 @@
 """
 SELECT Query parser
 """
-from typing import List, Dict
+from typing import List
+
+from pgorm.db.conditions import Query
 
 SELECT_QUERY = "SELECT {field_names} FROM {table_name} {where_clause} {limit_offset};"
 
 
 def get_parsed_select_query(
         table_name: str, field_names: List[str] = None,
-        where_clause: Dict = None, offset: int = None, limit: int = None
+        where_clause: Query = None, offset: int = None, limit: int = None
 ):
     """
     Parse get query according to the received params
