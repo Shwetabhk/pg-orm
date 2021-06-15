@@ -5,7 +5,7 @@ from typing import List, Dict
 
 from .conditions import Query
 from .connection import Database, RealDictCursor
-from .query_parser import select, insert
+from .query_parser import select, insert, delete
 
 
 class BaseManager:
@@ -32,8 +32,12 @@ class BaseManager:
 
         # Construct Query
         table_name = self.model_class.table_name
+
+        if field_names:
+            field_names = list(field_names)
+
         query = select.get_parsed_select_query(
-            table_name=table_name, field_names=list(field_names),
+            table_name=table_name, field_names=field_names,
             where_clause=conditions, offset=offset, limit=limit
         )
 
@@ -65,8 +69,41 @@ class BaseManager:
     def update(self, new_data: Dict):
         pass
 
-    def delete(self):
-        pass
+    def delete(self, conditions: Query = None):
+        """
+        Delete records by condition
+        :param conditions:
+        :return: None
+        """
+        # Instantiate Database Connection and Cursor
+        instance: Database = Database()
+        connection = instance.connection
+        db_cursor = connection.cursor(cursor_factory=RealDictCursor)
+
+        # Construct Query
+        table_name = self.model_class.table_name
+        query = delete.get_parsed_delete_query(
+            table_name=table_name, where_clause=conditions
+        )
+
+        # Execute query and return results
+        db_cursor.execute(query)
+        connection.commit()
+
+    def delete_by_id(self, id: str):
+        """
+        Delete Single Record by unique id
+        :param id: id of the record to be deleted
+        :return: None
+        """
+        # Construct where clause
+        where_clause = Query(id={
+            'operator': '=',
+            'value': id
+        })
+
+        # Call delete function
+        self.delete(conditions=where_clause)
 
 
 class MetaModel(type):
