@@ -1,5 +1,5 @@
 """
-SELECT Query parser
+SELECT Query Parser
 """
 from typing import List
 

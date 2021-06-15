@@ -1,5 +1,5 @@
 """
-DELETE Query parser
+DELETE Query Parser
 """
 from pgorm.db.conditions import Query
 

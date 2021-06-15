@@ -1,5 +1,5 @@
 """
-INSERT Query parser
+INSERT Query Parser
 """
 from typing import Dict
 

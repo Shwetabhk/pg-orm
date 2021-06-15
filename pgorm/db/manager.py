@@ -7,7 +7,7 @@ from psycopg2.extras import RealDictCursor
 
 from .conditions import Query
 from .connection import Database
-from .query_parser import select, insert, delete
+from .query_parser import select, insert, update, delete
 
 
 class BaseManager:
@@ -61,15 +61,43 @@ class BaseManager:
 
         # Construct Query
         table_name = self.model_class.table_name
-        query = insert.get_parsed_single_insert_query(table_name, record)
+        query = insert.get_parsed_single_insert_query(table_name=table_name, record=record)
 
         # Execute query and return results
         db_cursor.execute(query)
         connection.commit()
         return dict(db_cursor.fetchone())
 
-    def update(self, new_data: Dict):
-        pass
+    def update(self, values: Dict, conditions: Query):
+        # Instantiate Database Connection and Cursor
+        instance: Database = Database()
+        connection = instance.connection
+        db_cursor = connection.cursor(cursor_factory=RealDictCursor)
+
+        # Construct Query
+        table_name = self.model_class.table_name
+        query = update.get_parsed_single_update_query(table_name=table_name, values=values, where_clause=conditions)
+
+        # Execute query and return results
+        db_cursor.execute(query)
+        connection.commit()
+        return dict(db_cursor.fetchone())
+
+    def update_by_id(self, record: Dict, id: str):
+        """
+        Update Single Record by unique id
+        :param record: record to be updated
+        :param id: id of the record to be deleted
+        :return: None
+        """
+        # Construct where clause
+        where_clause = Query(id={
+            'operator': '=',
+            'value': id
+        })
+
+        # Call delete function
+        self.update(values=record, conditions=where_clause)
 
     def delete(self, conditions: Query):
         """

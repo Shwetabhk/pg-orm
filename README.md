@@ -175,7 +175,7 @@ Employees.records.delete_by_id(id=1)
 
 ## Contributions
 
-The repository is not actively accepting contributions. Please reach out to shwetabh002@gmail.com for any help or create and issue on github.
+The repository is not actively accepting contributions. Please reach out to shwetabh002@gmail.com for any help or create an issue on github.
 
 ## License
 

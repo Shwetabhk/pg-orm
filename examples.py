@@ -57,3 +57,20 @@ if __name__ == '__main__':
 
     # Delete By Id
     Employees.records.delete_by_id(id=employee_created_2['id'])
+
+    # Update Query
+
+    employee_to_be_updated = {
+        'first_name': 'Shwetabh',
+        'last_name': 'Kumar',
+        'salary': '100000',
+        'grade': 'L4'
+    }
+
+    # Update by condition
+    Employees.records.update(conditions=Query(first_name={
+        'operator': '=', 'value': 'Shwetabh'
+    }), values=employee_to_be_updated)
+
+    # Update by id
+    Employees.records.update_by_id(record=employee_to_be_updated, id=1)
