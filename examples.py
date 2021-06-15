@@ -68,9 +68,12 @@ if __name__ == '__main__':
     }
 
     # Update by condition
-    Employees.records.update(conditions=Query(first_name={
+    employees = Employees.records.update(conditions=Query(first_name={
         'operator': '=', 'value': 'Shwetabh'
     }), values=employee_to_be_updated)
 
+    print(employees)
+
     # Update by id
-    Employees.records.update_by_id(record=employee_to_be_updated, id=1)
+    employees = Employees.records.update_by_id(record=employee_to_be_updated, id=1)
+    print(employees)

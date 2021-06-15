@@ -81,7 +81,7 @@ class BaseManager:
         # Execute query and return results
         db_cursor.execute(query)
         connection.commit()
-        return dict(db_cursor.fetchone())
+        return [dict(record) for record in db_cursor.fetchall()]
 
     def update_by_id(self, record: Dict, id: str):
         """
@@ -97,7 +97,7 @@ class BaseManager:
         })
 
         # Call delete function
-        self.update(values=record, conditions=where_clause)
+        return self.update(values=record, conditions=where_clause) [0]
 
     def delete(self, conditions: Query):
         """
