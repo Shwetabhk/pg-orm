@@ -69,6 +69,12 @@ class BaseManager:
         return dict(db_cursor.fetchone())
 
     def update(self, values: Dict, conditions: Query):
+        """
+        Update Single Record by condition
+        :param values: values to be updated
+        :param conditions: Where clause
+        :return: List of updated records
+        """
         # Instantiate Database Connection and Cursor
         instance: Database = Database()
         connection = instance.connection
@@ -88,7 +94,7 @@ class BaseManager:
         Update Single Record by unique id
         :param record: record to be updated
         :param id: id of the record to be deleted
-        :return: None
+        :return: Updated record
         """
         # Construct where clause
         where_clause = Query(id={
