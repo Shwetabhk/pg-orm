@@ -40,7 +40,7 @@ import os
 from pgorm.db.models import Model
 
 os.environ.setdefault('DATABASE_HOST', 'localhost')
-os.environ.setdefault('DATABASE_PORT', '5433')
+os.environ.setdefault('DATABASE_PORT', '5432')
 os.environ.setdefault('DATABASE_NAME', 'pgorm')
 os.environ.setdefault('DATABASE_USER', 'postgres')
 os.environ.setdefault('DATABASE_PASSWORD', 'postgres')

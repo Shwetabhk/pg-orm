@@ -25,8 +25,25 @@ class Query:
         where_clause = ''
         condition_counter = 1
         for condition in self.conditions:
-            where_clause = "{0} {1} {2} '{3}'".format(
-                where_clause, condition, self.conditions[condition]['operator'], self.conditions[condition]['value'])
+
+            # Null Check case handling
+            if self.conditions[condition]['operator'] == '=' and self.conditions[condition]['value'] is None:
+                self.conditions[condition]['operator'] = 'IS'
+                self.conditions[condition]['value'] = 'NULL'
+
+                where_clause = "{0} {1} {2} {3}".format(
+                    where_clause, 
+                    condition, 
+                    self.conditions[condition]['operator'], self.conditions[condition]['value']
+                )
+
+            else: 
+                where_clause = "{0} {1} {2} '{3}'".format(
+                    where_clause,
+                    condition,
+                    self.conditions[condition]['operator'], self.conditions[condition]['value']
+                )
+
             if condition_counter != len(self.conditions.keys()):
                 where_clause = '{0} AND'.format(where_clause)
             condition_counter = condition_counter + 1
