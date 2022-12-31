@@ -8,6 +8,7 @@ from psycopg2.extras import RealDictCursor
 from .conditions import Query
 from .connection import Database
 from .query_parser import select, insert, update, delete
+from .exceptions import RecordNotFound
 
 
 class BaseManager:
@@ -103,7 +104,11 @@ class BaseManager:
         })
 
         # Call delete function
-        return self.update(values=record, conditions=where_clause) [0]
+        record = self.update(values=record, conditions=where_clause)
+
+        if record:
+            return record[0]
+        raise RecordNotFound('Record not found in table: {} with id: {}'.format(self.model_class.table_name, id))
 
     def delete(self, conditions: Query):
         """

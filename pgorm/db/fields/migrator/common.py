@@ -1,5 +1,6 @@
 from pgorm.db.connection import Database
 
+
 def __get_cursor_and_connection():
     """
     Private function to return cursor and connection
@@ -10,7 +11,8 @@ def __get_cursor_and_connection():
 
     return db_cursor, connection
 
-def run_sql(sql: str) -> None:
+
+def run_sql(sql: str, cursor) -> None:
     """
     Run SQL Query
     :param sql: SQL Query
@@ -18,10 +20,7 @@ def run_sql(sql: str) -> None:
     """
     # Execute query and return results
 
-    db_cursor, connection = __get_cursor_and_connection()
-
-    db_cursor.execute(sql)
-    connection.commit()
+    cursor.execute(sql)
 
 
 def fetch_db_info(table_name: str) -> list:
@@ -44,6 +43,6 @@ def rollback():
     """
     Rollback DB Transaction
     """
-    _, connection = __get_cursor_and_connection()
+    cursor, _ = __get_cursor_and_connection()
 
-    connection.rollback()
+    cursor.execute("ROLLBACK")

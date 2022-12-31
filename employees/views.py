@@ -3,6 +3,8 @@ import logging
 from flask import request
 from flask_restful import Resource
 
+from pgorm.db.exceptions import RecordNotFound
+
 from .models import Employees
 
 
@@ -24,7 +26,12 @@ class EmployeesAPI(Resource):
     def put(self):
         data = request.get_json(force=True)
         logger.debug(data)
-        return Employees.update_by_id(data['id'], data)
+        try:
+            Employees.update_by_id(data['id'], data)
+        except RecordNotFound:
+            return {
+                'error': 'Record not found'
+            }, 404
 
     def delete(self):
         data = request.get_json(force=True)
