@@ -1,3 +1,4 @@
+import logging
 import hashlib
 from pgorm.db.connection import Database
 from pgorm.db.manager import MetaModel
@@ -15,6 +16,9 @@ from pgorm.db.exceptions import (
     MigrationError
 )
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 class Model(metaclass=MetaModel):
     """
@@ -22,7 +26,7 @@ class Model(metaclass=MetaModel):
     """
     table_name = ''
 
-    def create_migration(self):
+    def register(self):
         """
         Create Migration for the Model
         :return: None
@@ -60,10 +64,14 @@ class Model(metaclass=MetaModel):
             if latest_migration and latest_migration['hash_code'] == hash_code:
                 return
             
+            logger.info('Creating Migration for %s' % self.table_name)
+           
             # Increment the version of the migration
             if latest_migration:
+                logger.info('Found an existing migration - %s' % latest_migration['name'])
                 version = int(latest_migration['name'].split('_')[1]) + 1
             else:
+                logger.info('Creating first migration')
                 version = 1
 
             # Generate Migration Name
@@ -78,6 +86,9 @@ class Model(metaclass=MetaModel):
             )
 
             # Construct Query
+            logger.info('Creating Migration for %s' % self.table_name)
+
+            logger.info('Running Statement: %s' % statement)
             if not latest_migration:
                 create(
                     statement=statement,
@@ -93,5 +104,6 @@ class Model(metaclass=MetaModel):
             connection.commit()
         except Exception as e:
             # Incase Migration goes wrong, rollback
+            logger.error('Migration Failed')
             connection.rollback()
             raise MigrationError(e)

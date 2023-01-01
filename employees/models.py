@@ -12,6 +12,7 @@ class Employees(models.Model):
     last_name = fields.VarChar(max_length=255, default=None, null=True)
     salary = fields.VarChar(max_length=255, default='30 LPA', null=True)
     grade = fields.VarChar(max_length=255, default='L1', null=True)
+    department = fields.VarChar(max_length=255, default='IT', null=True)
 
     def create(employee: Dict):
         return Employees.records.insert(**employee)

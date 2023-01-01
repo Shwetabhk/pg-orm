@@ -27,4 +27,4 @@ if __name__ == '__main__':
             app.run(debug=True)
         elif sys.argv[1] == 'migrate':
             # Migrate models.py of each directory
-            from employees.migrations import *
+            Employees().register()
